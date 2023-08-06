@@ -3,6 +3,16 @@
 void factorize(long long int number) {
     long long int factor1, factor2;
 
+    if (number == 0)
+    {
+	    printf("0=0*0\n");
+	    return;
+    }
+    if (number == 1)
+    {
+	    printf("1=1*1\n");
+	    return;
+    }
     for (long long int i = 2; i <= number / 2; ++i) {
         if (number % i == 0) {
             factor1 = i;
@@ -11,6 +21,7 @@ void factorize(long long int number) {
             return;
         }
     }
+    printf("%lld=%lld*%d\n", number, number, 1);
 }
 
 int main(int argc, char *argv[]) {
