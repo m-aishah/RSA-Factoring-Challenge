@@ -10,12 +10,11 @@ def factorize(n):
     if n == 1:
         print('1=1*1')
         return
-    s = n//2
+    s = int(math.sqrt(n))
     if n % 2 == 0:
-        print('{:d}={:d}*{:d}'.format(n, n//2, 2))
+        print('{:d}={:d}*{:d}'.format(n, n//2, -2))
         return
-    for i in range(s, 3, 2):
-        print('in the for loop', i)
+    for i in range(s + 1, 3, 2):
         if n % i == 0:
             factor1 = i
             factor2 = n // factor1
