@@ -1,0 +1,52 @@
+#!/usr/bin/python3
+
+import sys
+import math
+import random
+
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def pollards_rho(n):
+    if n == 1:
+        return []
+
+    def f(x):
+        return (x * x + 1) % n
+
+    x, y, d = 2, 2, 1
+    while d == 1:
+        x = f(x)
+        y = f(f(y))
+        d = gcd(abs(x - y), n)
+
+    if d == n:
+        return []
+
+    return [d, n // d]
+
+def factorize(n):
+    prime_factors = pollards_rho(n)
+    if len(prime_factors) == 2:
+        p, q = prime_factors
+        print(f'{n}={p}*{q}')
+    else:
+        print(f'{n} does not have two distinct prime factors.')
+
+if len(sys.argv) != 2:
+    print('Usage: factors <file>')
+    sys.exit(1)
+
+filename = sys.argv[1]
+
+try:
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+except IOError:
+    sys.exit(1)
+
+for line in lines:
+    n = int(line.strip())
+    factorisation = factorize(n)

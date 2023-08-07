@@ -1,52 +1,45 @@
 #!/usr/bin/python3
 
-import sys
 import math
-import random
+import sys
 
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(math.sqrt(num)) + 1):
+        if num % i == 0:
+            return False
+    return True
 
 def pollards_rho(n):
-    if n == 1:
-        return []
+    x = 2
+    y = 2
+    d = 1
 
-    def f(x):
-        return (x * x + 1) % n
-
-    x, y, d = 2, 2, 1
     while d == 1:
-        x = f(x)
-        y = f(f(y))
-        d = gcd(abs(x - y), n)
+        x = (x * x + 1) % n
+        y = (y * y + 1) % n
+        y = (y * y + 1) % n
+        d = math.gcd(abs(x - y), n)
 
-    if d == n:
-        return []
+    return d
 
-    return [d, n // d]
+def factorize_rsa_number(n):
+    p = pollards_rho(n)
+    q = n // p
+    return p, q
 
-def factorize(n):
-    prime_factors = pollards_rho(n)
-    if len(prime_factors) == 2:
-        p, q = prime_factors
-        print(f'{n}={p}*{q}')
-    else:
-        print(f'{n} does not have two distinct prime factors.')
-
-if len(sys.argv) != 2:
-    print('Usage: factors <file>')
-    sys.exit(1)
-
-filename = sys.argv[1]
-
-try:
+def main(filename):
     with open(filename, 'r') as file:
-        lines = file.readlines()
-except IOError:
-    sys.exit(1)
+        for line in file:
+            n = int(line.strip())
+            p, q = factorize_rsa_number(n)
+            print(f'{n}={p}*{q}')
 
-for line in lines:
-    n = int(line.strip())
-    factorisation = factorize(n)
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python rsa <file>")
+    else:
+        filename = sys.argv[1]
+        main(filename)
+
