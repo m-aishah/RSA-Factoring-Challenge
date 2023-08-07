@@ -2,46 +2,38 @@
 
 import sys
 import math
+import random
 
-def is_prime(num):
-    if num < 2:
-        return False
-    for i in range(2, int(math.sqrt(num)) + 1):
-        if num % i == 0:
-            return False
-    return True
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def pollards_rho(n):
+    if n == 1:
+        return []
+
+    def f(x):
+        return (x * x + 1) % n
+
+    x, y, d = 2, 2, 1
+    while d == 1:
+        x = f(x)
+        y = f(f(y))
+        d = gcd(abs(x - y), n)
+
+    if d == n:
+        return []
+
+    return [d, n // d]
 
 def factorize(n):
-    if n == 0:
-        return
-    if n == 1:
-        return
-
-    num = n
-    prime_factors = []
-    while n % 2 == 0:
-        prime_factors.append(2)
-        n //= 2
-        if len(prime_factors) == 2:
-            break
-
-    for i in range(3, int(math.sqrt(n)) + 1, 2):
-        while n % i == 0:
-            prime_factors.append(i)
-            n //= i
-            if len(prime_factors) == 2:
-                break
-
-    if n > 2:
-        prime_factors.append(n)
-
+    prime_factors = pollards_rho(n)
     if len(prime_factors) == 2:
         p, q = prime_factors
-        print(f'{num}={p}*{q}')
+        print(f'{n}={p}*{q}')
     else:
         print(f'{n} does not have two distinct prime factors.')
-
-
 
 if len(sys.argv) != 2:
     print('Usage: factors <file>')
