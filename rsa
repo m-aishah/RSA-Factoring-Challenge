@@ -24,8 +24,7 @@ def factorize(n):
         if is_prime(s):
             print('{:d}={:d}*{:d}'.format(n, n//2, 2))
             return
-    for i in range(s, 3, -2):
-        print('in the for loop', i)
+    for i in range(s, 2, -1):
         if n % i == 0:
             if is_prime(n // i):
                 factor1 = i
