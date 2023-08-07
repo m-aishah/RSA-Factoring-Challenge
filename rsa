@@ -3,35 +3,46 @@
 import sys
 import math
 
-def is_prime(n):
-    if n > 1:
-        for i in range(2, int(n / 2) + 1):
-            if(n % i) == 0:
-                return(0)
-        
-        return(1)
-    return(0)
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(math.sqrt(num)) + 1):
+        if num % i == 0:
+            return False
+    return True
 
 def factorize(n):
     if n == 0:
-        print('0=0*0')
+        print('0 has no prime factors.')
         return
     if n == 1:
-        print('1=1*1')
+        print('1 has no prime factors.')
         return
-    s = n//2
-    if n % 2 == 0:
-        if is_prime(s):
-            print('{:d}={:d}*{:d}'.format(n, n//2, 2))
-            return
-    for i in range(s, 2, -1):
-        if n % i == 0:
-            if is_prime(n // i):
-                factor1 = i
-                factor2 = n // factor1
-                print('{:d}={:d}*{:d}'.format(n, factor2, factor1))
-                return
-    print('{:d}={:d}*1'.format(n, n))
+
+    prime_factors = []
+    while n % 2 == 0:
+        prime_factors.append(2)
+        n //= 2
+        if len(prime_factors) == 2:
+            break
+
+    for i in range(3, int(math.sqrt(n)) + 1, 2):
+        while n % i == 0:
+            prime_factors.append(i)
+            n //= i
+            if len(prime_factors) == 2:
+                break
+
+    if n > 2:
+        prime_factors.append(n)
+
+    if len(prime_factors) == 2:
+        p, q = prime_factors
+        print(f'{n} = {p} * {q}')
+    else:
+        print(f'{n} does not have two distinct prime factors.')
+
+
 
 if len(sys.argv) != 2:
     print('Usage: factors <file>')
